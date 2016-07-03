@@ -17,7 +17,7 @@ local function callback_reply(extra, success, result)
 		userrank = "Moderator ⭐"
 		send_document(org_chat_id,"umbrella/stickers/mod.webp", ok_cb, false)
 	elseif tonumber(result.from.id) == tonumber(our_id) then
-		userrank = "Grandex ⭐⭐⭐⭐⭐⭐"
+		userrank = "Signal ⭐⭐⭐⭐⭐⭐"
 		send_document(org_chat_id,"umbrella/stickers/umb.webp", ok_cb, false)
 	elseif result.from.username then
 		if string.sub(result.from.username:lower(), -3) == "bot" then
@@ -106,7 +106,7 @@ local function callback_reply(extra, success, result)
 	--phone ------------------------------------------------------------------------------------------------
 	if access == 1 then
 		if result.from.phone then
-			number = "0"..string.sub(result.from.phone, 3)
+			number = "+"..string.sub(result.from.phone, 3)
 			if string.sub(result.from.phone, 0,2) == '98' then
 				number = number.."\nکشور: جمهوری اسلامی ایران"
 				if string.sub(result.from.phone, 0,4) == '9891' then
@@ -154,19 +154,23 @@ local function callback_reply(extra, success, result)
 		end
 	end
 	--info ------------------------------------------------------------------------------------------------
-	info = "نام کامل: "..string.gsub(result.from.print_name, "_", " ").."\n"
-	.."نام کوچک: "..(result.from.first_name or "-----").."\n"
-	.."نام خانوادگی: "..(result.from.last_name or "-----").."\n\n"
-	.."شماره موبایل: "..number.."\n"
-	.."یوزرنیم: @"..(result.from.username or "-----").."\n"
-	.."آی دی: "..result.from.id.."\n\n"
-	.."مقام: "..usertype.."\n"
-	.."جایگاه: "..userrank.."\n\n"
-	.."رابط کاربری: "..hardware.."\n"
-	.."تعداد پیامها: "..user_info.msgs.."\n"
-	.."نوع پیام: "..msg_type.."\n\n"
-	.."نام گروه: "..string.gsub(result.to.print_name, "_", " ").."\n"
-	.."آی دی گروه: "..result.to.id
+			local url , res = http.request('http://api.gpmod.ir/time/')
+            if res ~= 200 then return "No connection" end
+            local jdat = json:decode(url)
+			local info = "نام کامل: "..string.gsub(msg.from.print_name, "_", " ").."\n"
+					.."نام کوچک: "..(msg.from.first_name or "-----").."\n"
+					.."نام خانوادگی: "..(msg.from.last_name or "-----").."\n\n"
+					.."شماره موبایل: "..number.."\n"
+					.."یوزرنیم: @"..(msg.from.username or "-----").."\n\n"
+					.."ساعت: "..jdat.FAtime.."\n"
+					.."تاريخ: "..jdat.FAdate.."\n"
+					.."آی دی: "..msg.from.id.."\n\n"
+					.."مقام: "..usertype.."\n"
+					.."جایگاه: "..userrank.."\n\n"
+					.."رابط کاربری: "..hardware.."\n"
+					.."تعداد پیامها: "..user_info.msgs.."\n\n"
+					.."نام گروه: "..string.gsub(msg.to.print_name, "_", " ").."\n"
+					.."آی دی گروه: "..msg.to.id
 	send_large_msg(org_chat_id, info)
 end
 
@@ -191,7 +195,7 @@ local function callback_res(extra, success, result)
 		userrank = "Moderator ⭐"
 		send_document(org_chat_id,"umbrella/stickers/mod.webp", ok_cb, false)
 	elseif tonumber(result.id) == tonumber(our_id) then
-		userrank = "Grandex ⭐⭐⭐⭐⭐⭐"
+		userrank = "Signal ⭐⭐⭐⭐⭐⭐"
 		send_document(org_chat_id,"umbrella/stickers/umb.webp", ok_cb, false)
 	elseif result.from.username then
 		if string.sub(result.from.username:lower(), -3) == "bot" then
@@ -211,7 +215,7 @@ local function callback_res(extra, success, result)
 	--phone ------------------------------------------------------------------------------------------------
 	if access == 1 then
 		if result.phone then
-			number = "0"..string.sub(result.phone, 3)
+			number = "+"..string.sub(result.phone, 3)
 			if string.sub(result.phone, 0,2) == '98' then
 				number = number.."\nکشور: جمهوری اسلامی ایران"
 				if string.sub(result.phone, 0,4) == '9891' then
@@ -291,7 +295,7 @@ local function callback_info(extra, success, result)
 		userrank = "Moderator ⭐"
 		send_document(org_chat_id,"umbrella/stickers/mod.webp", ok_cb, false)
 	elseif tonumber(result.id) == tonumber(our_id) then
-		userrank = "Grandex ⭐⭐⭐⭐⭐⭐"
+		userrank = "Signal ⭐⭐⭐⭐⭐⭐"
 		send_document(org_chat_id,"umbrella/stickers/umb.webp", ok_cb, false)
 	elseif result.from.username then
 		if string.sub(result.from.username:lower(), -3) == "bot" then
@@ -311,7 +315,7 @@ local function callback_info(extra, success, result)
 	--phone ------------------------------------------------------------------------------------------------
 	if access == 1 then
 		if result.phone then
-			number = "0"..string.sub(result.phone, 3)
+			number = "+"..string.sub(result.phone, 3)
 			if string.sub(result.phone, 0,2) == '98' then
 				number = number.."\nکشور: جمهوری اسلامی ایران"
 				if string.sub(result.phone, 0,4) == '9891' then
@@ -402,10 +406,10 @@ local function run(msg, matches)
 	else
 		access = 0
 	end
-	if matches[1] == '/infodel' and is_sudo(msg) then
+	if matches[1] == 'infodel' and is_sudo(msg) then
 		azlemagham = io.popen('rm ./info/'..matches[2]..'.txt'):read('*all')
 		return 'از مقام خود عزل شد'
-	elseif matches[1] == '/info' and is_sudo(msg) then
+	elseif matches[1] == 'Info' and is_sudo(msg) then
 		local name = string.sub(matches[2], 1, 50)
 		local text = string.sub(matches[3], 1, 10000000000)
 		local file = io.open("./info/"..name..".txt", "w")
@@ -463,7 +467,7 @@ local function run(msg, matches)
 			--number ------------------------------------------------------------------------------------------------
 			if msg.from.phone then
 				numberorg = string.sub(msg.from.phone, 3)
-				number = "****0"..string.sub(numberorg, 0,6)
+				number = "****+"..string.sub(numberorg, 0,6)
 				if string.sub(msg.from.phone, 0,2) == '98' then
 					number = number.."\nکشور: جمهوری اسلامی ایران"
 					if string.sub(msg.from.phone, 0,4) == '9891' then
@@ -485,12 +489,17 @@ local function run(msg, matches)
 			else
 				number = "-----"
 			end
-			--info ------------------------------------------------------------------------------------------------
+			--time ------------------------------------------------------------------------------------------------
+			local url , res = http.request('http://api.gpmod.ir/time/')
+            if res ~= 200 then return "No connection" end
+            local jdat = json:decode(url)
 			local info = "نام کامل: "..string.gsub(msg.from.print_name, "_", " ").."\n"
 					.."نام کوچک: "..(msg.from.first_name or "-----").."\n"
 					.."نام خانوادگی: "..(msg.from.last_name or "-----").."\n\n"
 					.."شماره موبایل: "..number.."\n"
-					.."یوزرنیم: @"..(msg.from.username or "-----").."\n"
+					.."یوزرنیم: @"..(msg.from.username or "-----").."\n\n"
+					.."ساعت : "..jdat.FAtime.."\n"
+					.."تاريخ :"..jdat.FAdate.."\n"
 					.."آی دی: "..msg.from.id.."\n\n"
 					.."مقام: "..usertype.."\n"
 					.."جایگاه: "..userrank.."\n\n"
@@ -513,14 +522,14 @@ return {
 			"/info (reply): اطلاعات دیگران",
 			},
 		sudo = {
-			"/info (id) (txt) : اعطای مقام",
-			"/infodel : حذف مقام",
+			"Info (id) (txt) : اعطای مقام",
+			"infodel : حذف مقام",
 			},
 		},
 	patterns = {
-		"^[!/#](infodel) (.*)$",
-		"^[!/#](info) ([^%s]+) (.*)$",
-		"^[!/#]([Ii]nfo) (.*)$",
+		"^(infodel) (.*)$",
+		"^(Info) ([^%s]+) (.*)$",
+		"^[!/#](info) (.*)$",
 		"^[!/#](info)$",
 		"^[!/#](Info)$",
 	},
